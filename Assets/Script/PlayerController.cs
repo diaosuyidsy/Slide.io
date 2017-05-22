@@ -17,6 +17,11 @@ public class PlayerController : MonoBehaviour
 	private int head;
 	private int tail = 0;
 
+	//Testing new script
+	public float acceleration;
+	public float steering;
+	public float maxSpeed;
+
 	void Update ()
 	{
 //		if (!isLocalPlayer) {
@@ -37,21 +42,74 @@ public class PlayerController : MonoBehaviour
 		}
 
 
-		rb.AddForce (transform.up * speed, ForceMode2D.Force);
+//		rb.AddForce (transform.up * speed, ForceMode2D.Force);
+//
+//		if (Input.GetAxis ("Horizontal") > 0f) {
+//			transform.Rotate (0f, 0f, -1f * rotateAngle * Time.deltaTime, Space.Self);
+//		}
+//
+//		if (Input.GetAxis ("Horizontal") < 0f) {
+//			transform.Rotate (0f, 0f, 1f * rotateAngle * Time.deltaTime, Space.Self);
+//		}
 
-		if (Input.GetAxis ("Horizontal") > 0f) {
-			transform.Rotate (0f, 0f, -1f * rotateAngle * Time.deltaTime, Space.Self);
+		float h = -Input.GetAxis ("Horizontal");
+		float v = Input.GetAxis ("Vertical");
+
+		Vector2 speed = transform.up * (v * acceleration);
+		rb.AddForce (speed);
+
+		//Limit car velocity
+		rb.velocity = Vector2.ClampMagnitude (rb.velocity, maxSpeed);
+		if (Input.GetButtonUp ("Jump")) {
+			transform.up = rb.velocity;
+		}
+		if (Input.GetButton ("Jump")) {
+			float direction = Vector2.Dot (rb.velocity, rb.GetRelativeVector (Vector2.up));
+			if (direction >= 0.0f) {
+				rb.rotation += 0.5f * h * steering * (rb.velocity.magnitude / 5.0f);
+//				rb.AddTorque (10 * (h * steering) * (rb.velocity.magnitude / 10.0f));
+			} else {
+				rb.rotation -= 0.5f * h * steering * (rb.velocity.magnitude / 5.0f);
+//				rb.AddTorque (10 * (-h * steering) * (rb.velocity.magnitude / 10.0f));
+			}
+		} else {
+			float direction = Vector2.Dot (rb.velocity, rb.GetRelativeVector (Vector2.up));
+			if (direction >= 0.0f) {
+				rb.rotation += h * steering * (rb.velocity.magnitude / 5.0f);
+//				rb.AddTorque ((h * steering) * (rb.velocity.magnitude / 10.0f));
+			} else {
+				rb.rotation -= h * steering * (rb.velocity.magnitude / 5.0f);
+//				rb.AddTorque ((-h * steering) * (rb.velocity.magnitude / 10.0f));
+			}
+
+			Vector2 forward = new Vector2 (0.0f, 0.5f);
+			float steeringRightAngle;
+			if (rb.angularVelocity > 0) {
+				steeringRightAngle = -90;
+			} else {
+				steeringRightAngle = 90;
+			}
+
+			Vector2 rightAngleFromForward = Quaternion.AngleAxis (steeringRightAngle, Vector3.forward) * forward;
+
+			float driftForce = Vector2.Dot (rb.velocity, rb.GetRelativeVector (rightAngleFromForward.normalized));
+
+			Vector2 relativeForce = (rightAngleFromForward.normalized * -1.0f) * (driftForce * 10.0f);
+
+			rb.AddForce (rb.GetRelativeVector (relativeForce));
+
 		}
 
-		if (Input.GetAxis ("Horizontal") < 0f) {
-			transform.Rotate (0f, 0f, 1f * rotateAngle * Time.deltaTime, Space.Self);
-		}
+
+
+
+	
 	}
 
 	void Start ()
 	{
 		rb = GetComponent<Rigidbody2D> ();
-		GetComponent<SpriteRenderer> ().color = Color.yellow;
+//		GetComponent<SpriteRenderer> ().color = Color.yellow;
 		Camera.main.GetComponent<CameraFollow2D> ().setTarget (gameObject.transform);
 
 		// Logic for Trail
@@ -103,10 +161,10 @@ public class PlayerController : MonoBehaviour
 
 
 
-	public void successfulHit ()
-	{
-		Destroy (this.gameObject);
-	}
+	//	public void successfulHit ()
+	//	{
+	//		Destroy (this.gameObject);
+	//	}
 }
 
 
