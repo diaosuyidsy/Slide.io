@@ -6,9 +6,9 @@ using System.Collections;
 public class PlayerController : MonoBehaviour
 {
 	public float trailSpawnTimeInterval;
-	public float speed;
-	public float rotateAngle;
 	public Transform trailSpawnPoint;
+	public GameObject[] Wheels;
+	public GameObject trailSpawnPrefab;
 
 	private Rigidbody2D rb;
 	// The variable for Trail logic
@@ -18,17 +18,17 @@ public class PlayerController : MonoBehaviour
 	private int tail = 0;
 
 	//Testing new script
-	public float acceleration;
+	public float maxAcceleration;
 	public float steering;
 	public float maxSpeed;
+	public float maxBurstTime;
 
-	void Update ()
-	{
-//		if (!isLocalPlayer) {
-//			return;
-//		}
+	private float burstTime;
+	private float acceleration;
+	private bool burstLock = true;
+	private GameObject[] spawnedTrails;
 
-	}
+	private 
 
 	void FixedUpdate ()
 	{
@@ -53,33 +53,69 @@ public class PlayerController : MonoBehaviour
 //		}
 
 		float h = -Input.GetAxis ("Horizontal");
-		float v = Input.GetAxis ("Vertical");
 
-		Vector2 speed = transform.up * (v * acceleration);
-		rb.AddForce (speed);
+		if (acceleration <= maxAcceleration) {
+			acceleration += 5 * Time.deltaTime;
+		}
+
+		if (acceleration > maxAcceleration) {
+			acceleration -= 5 * Time.deltaTime;
+		}
+
+		if (!burstLock) {
+			acceleration = 1.5f * maxAcceleration;
+			burstTime -= Time.deltaTime;
+			if (burstTime <= 0f) {
+				burstLock = true;
+				burstTime = maxBurstTime;
+			}
+		}
+
+		Vector2 pullForce = transform.up * (1 * acceleration);
+		rb.AddForce (pullForce);
 
 		//Limit car velocity
 		rb.velocity = Vector2.ClampMagnitude (rb.velocity, maxSpeed);
-		if (Input.GetButtonUp ("Jump")) {
-			transform.up = rb.velocity;
+		if (Input.GetButton ("Burst")) {
+			burstLock = false;
 		}
-		if (Input.GetButton ("Jump")) {
+		if (Input.GetButtonDown ("Stop")) {
+			for (int i = 0; i < Wheels.Length; i++) {
+				spawnedTrails [i] = Instantiate (trailSpawnPrefab);
+				spawnedTrails [i].transform.parent = Wheels [i].transform;
+				spawnedTrails [i].transform.position = Wheels [i].transform.position;
+			}
+		}
+		if (Input.GetButtonUp ("Stop")) {
+			Debug.Log ("Got Button Up!!!!");
+			for (int i = 0; i < Wheels.Length; i++) {
+				Wheels [i].transform.DetachChildren ();
+			}
+		}
+		if (Input.GetButton ("Stop")) {
+			
 			float direction = Vector2.Dot (rb.velocity, rb.GetRelativeVector (Vector2.up));
 			if (direction >= 0.0f) {
-				rb.rotation += 0.5f * h * steering * (rb.velocity.magnitude / 5.0f);
-//				rb.AddTorque (10 * (h * steering) * (rb.velocity.magnitude / 10.0f));
+//				rb.rotation += 0.5f * h * steering * (rb.velocity.magnitude / 5.0f);
+				rb.AddTorque ((h * 0.008f) * (rb.velocity.magnitude / 10.0f));
 			} else {
-				rb.rotation -= 0.5f * h * steering * (rb.velocity.magnitude / 5.0f);
-//				rb.AddTorque (10 * (-h * steering) * (rb.velocity.magnitude / 10.0f));
+//				rb.rotation -= 0.5f * h * steering * (rb.velocity.magnitude / 5.0f);
+				rb.AddTorque ((-h * 0.008f) * (rb.velocity.magnitude / 10.0f));
 			}
 		} else {
+			if (Input.GetButtonUp ("Stop")) {
+				Debug.Log ("Got Button Up!!!!");
+				for (int i = 0; i < Wheels.Length; i++) {
+					Wheels [i].transform.DetachChildren ();
+				}
+			}
 			float direction = Vector2.Dot (rb.velocity, rb.GetRelativeVector (Vector2.up));
 			if (direction >= 0.0f) {
-				rb.rotation += h * steering * (rb.velocity.magnitude / 5.0f);
-//				rb.AddTorque ((h * steering) * (rb.velocity.magnitude / 10.0f));
+//				rb.rotation += h * steering * (rb.velocity.magnitude / 5.0f);
+				rb.AddTorque ((h * 0.005f) * (rb.velocity.magnitude / 10.0f));
 			} else {
-				rb.rotation -= h * steering * (rb.velocity.magnitude / 5.0f);
-//				rb.AddTorque ((-h * steering) * (rb.velocity.magnitude / 10.0f));
+//				rb.rotation -= h * steering * (rb.velocity.magnitude / 5.0f);
+				rb.AddTorque ((-h * 0.005f) * (rb.velocity.magnitude / 10.0f));
 			}
 
 			Vector2 forward = new Vector2 (0.0f, 0.5f);
@@ -111,6 +147,10 @@ public class PlayerController : MonoBehaviour
 		rb = GetComponent<Rigidbody2D> ();
 //		GetComponent<SpriteRenderer> ().color = Color.yellow;
 		Camera.main.GetComponent<CameraFollow2D> ().setTarget (gameObject.transform);
+		acceleration = 0f;
+		burstLock = true;
+		burstTime = maxBurstTime;
+		spawnedTrails = new GameObject[4];
 
 		// Logic for Trail
 		locs = new Vector3[20];
