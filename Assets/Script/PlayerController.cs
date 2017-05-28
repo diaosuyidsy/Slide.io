@@ -3,7 +3,7 @@ using UnityEngine.Networking;
 using System.Collections;
 
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : NetworkBehaviour
 {
 	public float trailSpawnTimeInterval;
 	public Transform trailSpawnPoint;
@@ -28,29 +28,33 @@ public class PlayerController : MonoBehaviour
 	private bool burstLock = true;
 	private GameObject[] spawnedTrails;
 
-	private 
+	void Update ()
+	{
+		if (Input.GetButtonDown ("Stop")) {
+			for (int i = 0; i < Wheels.Length; i++) {
+				spawnedTrails [i] = Instantiate (trailSpawnPrefab);
+				spawnedTrails [i].transform.parent = Wheels [i].transform;
+				spawnedTrails [i].transform.position = Wheels [i].transform.position;
+			}
+		}
+		if (Input.GetButtonUp ("Stop")) {
+			for (int i = 0; i < Wheels.Length; i++) {
+				Wheels [i].transform.DetachChildren ();
+			}
+		}
+	}
+
 
 	void FixedUpdate ()
 	{
-//		if (!isLocalPlayer) {
-//			return;
-//		}
 		RaycastHit2D hit = Hit ();
 		if (hit.collider != null) {
-			Debug.Log ("I hit: " + hit.collider.name);
-			hit.collider.gameObject.SendMessage ("successfulHit");
+//			Debug.Log ("I hit: " + hit.collider.name);
+			if (hit.collider.gameObject != this.gameObject) {
+//				Debug.Log ("Try to destroy this");
+//				NetworkServer.Destroy (hit.collider.gameObject); 
+			}
 		}
-
-
-//		rb.AddForce (transform.up * speed, ForceMode2D.Force);
-//
-//		if (Input.GetAxis ("Horizontal") > 0f) {
-//			transform.Rotate (0f, 0f, -1f * rotateAngle * Time.deltaTime, Space.Self);
-//		}
-//
-//		if (Input.GetAxis ("Horizontal") < 0f) {
-//			transform.Rotate (0f, 0f, 1f * rotateAngle * Time.deltaTime, Space.Self);
-//		}
 
 		float h = -Input.GetAxis ("Horizontal");
 
@@ -71,7 +75,8 @@ public class PlayerController : MonoBehaviour
 			}
 		}
 
-		Vector2 pullForce = transform.up * (1 * acceleration);
+		Vector2 pullForce = transform.up * (Input.GetAxis ("Vertical") * acceleration);
+//		Vector2 pullForce = transform.up * (1 * acceleration);
 		rb.AddForce (pullForce);
 
 		//Limit car velocity
@@ -79,43 +84,25 @@ public class PlayerController : MonoBehaviour
 		if (Input.GetButton ("Burst")) {
 			burstLock = false;
 		}
-		if (Input.GetButtonDown ("Stop")) {
-			for (int i = 0; i < Wheels.Length; i++) {
-				spawnedTrails [i] = Instantiate (trailSpawnPrefab);
-				spawnedTrails [i].transform.parent = Wheels [i].transform;
-				spawnedTrails [i].transform.position = Wheels [i].transform.position;
-			}
-		}
-		if (Input.GetButtonUp ("Stop")) {
-			Debug.Log ("Got Button Up!!!!");
-			for (int i = 0; i < Wheels.Length; i++) {
-				Wheels [i].transform.DetachChildren ();
-			}
-		}
+
 		if (Input.GetButton ("Stop")) {
-			
+
 			float direction = Vector2.Dot (rb.velocity, rb.GetRelativeVector (Vector2.up));
 			if (direction >= 0.0f) {
-//				rb.rotation += 0.5f * h * steering * (rb.velocity.magnitude / 5.0f);
-				rb.AddTorque ((h * 0.008f) * (rb.velocity.magnitude / 10.0f));
+				//				rb.rotation += 0.5f * h * steering * (rb.velocity.magnitude / 5.0f);
+				rb.AddTorque ((h * 2f) * (rb.velocity.magnitude / 10.0f));
 			} else {
-//				rb.rotation -= 0.5f * h * steering * (rb.velocity.magnitude / 5.0f);
-				rb.AddTorque ((-h * 0.008f) * (rb.velocity.magnitude / 10.0f));
+				//				rb.rotation -= 0.5f * h * steering * (rb.velocity.magnitude / 5.0f);
+				rb.AddTorque ((-h * 2f) * (rb.velocity.magnitude / 10.0f));
 			}
 		} else {
-			if (Input.GetButtonUp ("Stop")) {
-				Debug.Log ("Got Button Up!!!!");
-				for (int i = 0; i < Wheels.Length; i++) {
-					Wheels [i].transform.DetachChildren ();
-				}
-			}
 			float direction = Vector2.Dot (rb.velocity, rb.GetRelativeVector (Vector2.up));
 			if (direction >= 0.0f) {
-//				rb.rotation += h * steering * (rb.velocity.magnitude / 5.0f);
-				rb.AddTorque ((h * 0.005f) * (rb.velocity.magnitude / 10.0f));
+				//				rb.rotation += h * steering * (rb.velocity.magnitude / 5.0f);
+				rb.AddTorque ((h * 1.5f) * (rb.velocity.magnitude / 10.0f));
 			} else {
-//				rb.rotation -= h * steering * (rb.velocity.magnitude / 5.0f);
-				rb.AddTorque ((-h * 0.005f) * (rb.velocity.magnitude / 10.0f));
+				//				rb.rotation -= h * steering * (rb.velocity.magnitude / 5.0f);
+				rb.AddTorque ((-h * 1.5f) * (rb.velocity.magnitude / 10.0f));
 			}
 
 			Vector2 forward = new Vector2 (0.0f, 0.5f);
@@ -136,16 +123,20 @@ public class PlayerController : MonoBehaviour
 
 		}
 
+	}
 
-
-
-	
+	public override void OnStartLocalPlayer ()
+	{
+		GetComponent<SpriteRenderer> ().color = Color.black;
 	}
 
 	void Start ()
 	{
+		if (!isLocalPlayer) {
+			Destroy (this);
+			return;
+		}
 		rb = GetComponent<Rigidbody2D> ();
-//		GetComponent<SpriteRenderer> ().color = Color.yellow;
 		Camera.main.GetComponent<CameraFollow2D> ().setTarget (gameObject.transform);
 		acceleration = 0f;
 		burstLock = true;
@@ -201,9 +192,13 @@ public class PlayerController : MonoBehaviour
 
 
 
-	//	public void successfulHit ()
+	//	public void successfulHit (Collision2D other)
 	//	{
-	//		Destroy (this.gameObject);
+	////		if (!isServer) {
+	////			return;
+	////		} else {
+	//
+	////		}
 	//	}
 }
 
