@@ -5,17 +5,10 @@ using System.Collections;
 
 public class PlayerController : NetworkBehaviour
 {
-	public float trailSpawnTimeInterval;
-	public Transform trailSpawnPoint;
 	public GameObject[] Wheels;
 	public GameObject trailSpawnPrefab;
 
 	private Rigidbody2D rb;
-	// The variable for Trail logic
-	public RaycastHit hit;
-	private Vector3[] locs;
-	private int head;
-	private int tail = 0;
 
 	//Testing new script
 	public float maxAcceleration;
@@ -47,15 +40,6 @@ public class PlayerController : NetworkBehaviour
 
 	void FixedUpdate ()
 	{
-		RaycastHit2D hit = Hit ();
-		if (hit.collider != null) {
-//			Debug.Log ("I hit: " + hit.collider.name);
-			if (hit.collider.gameObject != this.gameObject) {
-//				Debug.Log ("Try to destroy this");
-//				NetworkServer.Destroy (hit.collider.gameObject); 
-			}
-		}
-
 		float h = -Input.GetAxis ("Horizontal");
 
 		if (acceleration <= maxAcceleration) {
@@ -75,8 +59,8 @@ public class PlayerController : NetworkBehaviour
 			}
 		}
 
-		Vector2 pullForce = transform.up * (Input.GetAxis ("Vertical") * acceleration);
-//		Vector2 pullForce = transform.up * (1 * acceleration);
+//		Vector2 pullForce = transform.up * (Input.GetAxis ("Vertical") * acceleration);
+		Vector2 pullForce = transform.up * (1 * acceleration);
 		rb.AddForce (pullForce);
 
 		//Limit car velocity
@@ -142,77 +126,5 @@ public class PlayerController : NetworkBehaviour
 		burstLock = true;
 		burstTime = maxBurstTime;
 		spawnedTrails = new GameObject[4];
-
-		// Logic for Trail
-		locs = new Vector3[20];
-		for (int i = 0; i < locs.Length; i++) {
-			locs [i] = trailSpawnPoint.transform.position;
-		}
-		head = locs.Length - 1;
-		StartCoroutine (CollectData ());
 	}
-
-	IEnumerator CollectData ()
-	{
-		while (true) {
-			if (trailSpawnPoint.transform.position != locs [head]) {
-				head = (head + 1) % locs.Length;
-				tail = (tail + 1) % locs.Length;
-				locs [head] = trailSpawnPoint.transform.position;
-			}
-			yield return new WaitForSeconds (trailSpawnTimeInterval);
-		}
-	}
-
-	private RaycastHit2D Hit ()
-	{
-		RaycastHit2D hit = new RaycastHit2D ();
-		int i = head;
-		int j = head - 1;
-		if (j < 0)
-			j = locs.Length - 1;
-		while (j != head) {
-			hit = Physics2D.Linecast (locs [i], locs [j]);
-			if (hit.collider != null) {
-				return hit;
-			}
-
-			Debug.DrawLine (locs [i], locs [j], Color.black);
-
-			i = i - 1; 
-			if (i < 0)
-				i = locs.Length - 1;
-			
-			j = j - 1;
-			if (j < 0)
-				j = locs.Length - 1;
-		}
-		return hit;
-	}
-
-
-
-	//	public void successfulHit (Collision2D other)
-	//	{
-	////		if (!isServer) {
-	////			return;
-	////		} else {
-	//
-	////		}
-	//	}
 }
-
-
-//	IEnumerator spawnTrailComponents ()
-//	{
-//		yield return new WaitForSeconds (trailSpawnTimeInterval);
-//		CmdSpawn ();
-//		StartCoroutine (spawnTrailComponents ());
-//	}
-//
-//	[Command]
-//	void CmdSpawn ()
-//	{
-//		GameObject trailComponent = (GameObject)Instantiate (trailComponentPrefab, trailSpawnPoint.position, Quaternion.identity);
-//		NetworkServer.Spawn (trailComponent);
-//	}
