@@ -13,6 +13,8 @@ public class ConsumableSpawner : NetworkBehaviour
 
 	public void Spawn ()
 	{
+		if (!isServer)
+			return;
 		Vector3 randompos = new Vector3 ((Random.value * 2 - 1) * RightEdge.transform.position.x, (Random.value * 2 - 1) * UpEdge.transform.position.y);
 		// Spawn the consumable
 		Consume newConsumable;
@@ -24,6 +26,8 @@ public class ConsumableSpawner : NetworkBehaviour
 	// Use this for initialization
 	void Start ()
 	{
+		if (!isServer)
+			return;
 		for (int i = 0; i < maxConsumableNum; i++) {
 			Spawn ();
 		}

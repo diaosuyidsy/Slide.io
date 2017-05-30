@@ -20,9 +20,12 @@ public class CrushDetection :  NetworkBehaviour
 	{
 		RaycastHit2D hit = Hit ();
 		if (hit.collider != null) {
-			//			Debug.Log ("I hit: " + hit.collider.name);
-			if (hit.collider.gameObject != this.gameObject ||
-			    hit.collider.gameObject.transform.parent != this.gameObject) {
+//			Debug.Log ("Hit Name: " + hit.collider.gameObject.name + "\n" +
+//			"this gameobject name: " + this.gameObject.name + "\n" +
+//			"Hit parent Name: " + hit.collider.transform.parent.gameObject.name);
+			if (hit.collider.gameObject != this.gameObject &&
+			    hit.collider.gameObject.transform.parent != null &&
+			    hit.collider.gameObject.transform.parent.gameObject != this.gameObject) {
 				//				Debug.Log ("Try to destroy this");
 				preDealDamage (hit.collider.gameObject, 1);
 			}

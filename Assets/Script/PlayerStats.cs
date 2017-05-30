@@ -13,6 +13,9 @@ public class PlayerStats : NetworkBehaviour
 
 	int health;
 
+	private float trailSpawnInterval = 0.05f;
+	private float trailTime = 1.5f;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -51,6 +54,21 @@ public class PlayerStats : NetworkBehaviour
 		}
 			
 		RpcdamagePlayer (dmg);
+		return;
+	}
+
+	[ClientRpc]
+	void RpcConsume ()
+	{
+		GetComponent<TrailRenderer> ().time += 0.5f;
+		GetComponent<CrushDetection> ().trailSpawnTimeInterval += 0.015f;
+	}
+
+	public void takeConsume ()
+	{
+		if (!isServer)
+			return;
+		RpcConsume ();
 		return;
 	}
 }
