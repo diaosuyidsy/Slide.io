@@ -23,11 +23,9 @@ public class ConsumableSpawner : NetworkBehaviour
 		newConsumable.gameObject.transform.parent = ConsumableHolder.transform;
 		NetworkServer.Spawn (newConsumable.gameObject);
 	}
-	// Use this for initialization
-	void Start ()
+
+	public override void OnStartServer ()
 	{
-		if (!isServer)
-			return;
 		for (int i = 0; i < maxConsumableNum; i++) {
 			Spawn ();
 		}
