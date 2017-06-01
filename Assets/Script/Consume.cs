@@ -11,15 +11,20 @@ public class Consume : NetworkBehaviour
 
 	[SyncVar]
 	public Color ConsumeColor;
-	// Use this for initialization
-	void Start ()
+
+	public override void OnStartServer ()
 	{
+		base.OnStartServer ();
+		ConsumeColor = Random.ColorHSV (0f, 1f, 1f, 1f, 0.5f, 1f);
 		GetComponent<SpriteRenderer> ().color = ConsumeColor;
-		if (isServer) {
-			ConsumeColor = Random.ColorHSV (0f, 1f, 1f, 1f, 0.5f, 1f);
-			GetComponent<SpriteRenderer> ().color = ConsumeColor;
-		}
 	}
+
+	public override void OnStartClient ()
+	{
+		base.OnStartClient ();
+		GetComponent<SpriteRenderer> ().color = ConsumeColor;
+	}
+		
 	
 	// Update is called once per frame
 	void Update ()

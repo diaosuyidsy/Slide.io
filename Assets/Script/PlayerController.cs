@@ -111,7 +111,7 @@ public class PlayerController : NetworkBehaviour
 
 	public override void OnStartLocalPlayer ()
 	{
-		GetComponent<SpriteRenderer> ().color = Color.black;
+		GetComponent<SpriteOutline> ().enabled = true;
 	}
 
 	void Start ()

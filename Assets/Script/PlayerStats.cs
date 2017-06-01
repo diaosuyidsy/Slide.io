@@ -9,13 +9,28 @@ public class PlayerStats : NetworkBehaviour
 
 	public int maxHealth = 1;
 
+	[SyncVar]
+	public string playerName;
+
 	Text informationText;
 
 	int health;
 
-	private float trailSpawnInterval = 0.05f;
-	private float trailTime = 1.5f;
+	//	private float trailSpawnInterval = 0.05f;
+	//	private float trailTime = 1.5f;
 
+	public override void OnStartServer ()
+	{
+		base.OnStartServer ();
+		GetComponentInChildren<Text> ().text = playerName;
+	}
+
+	public override void OnStartClient ()
+	{
+		base.OnStartClient ();
+		GetComponentInChildren<Text> ().text = playerName;
+	}
+		
 	// Use this for initialization
 	void Start ()
 	{

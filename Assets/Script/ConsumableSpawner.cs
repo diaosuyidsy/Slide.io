@@ -26,7 +26,6 @@ public class ConsumableSpawner : NetworkBehaviour
 
 	public override void OnStartServer ()
 	{
-		Debug.Log ("ServerStarted");
 		for (int i = 0; i < maxConsumableNum; i++) {
 			Spawn ();
 		}

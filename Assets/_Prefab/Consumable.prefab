@@ -103,22 +103,22 @@ MonoBehaviour:
   m_SceneId:
     m_Value: 0
   m_AssetId:
-    i0: 0
-    i1: 0
-    i2: 0
-    i3: 0
-    i4: 0
-    i5: 0
-    i6: 0
-    i7: 0
-    i8: 0
-    i9: 0
-    i10: 0
-    i11: 0
-    i12: 0
-    i13: 0
-    i14: 0
-    i15: 0
+    i0: 234
+    i1: 53
+    i2: 169
+    i3: 240
+    i4: 183
+    i5: 12
+    i6: 116
+    i7: 95
+    i8: 25
+    i9: 218
+    i10: 195
+    i11: 46
+    i12: 184
+    i13: 213
+    i14: 72
+    i15: 153
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
 --- !u!114 &114916752408235492
@@ -132,6 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 324d2285da7104a0a96a9d046ba2ecaa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ConsumeColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!212 &212894040053778834
 SpriteRenderer:
   m_ObjectHideFlags: 1
