@@ -140,3 +140,4 @@ MonoBehaviour:
   isNetworkActive: 0
   matchMaker: {fileID: 0}
   inputName: {fileID: 0}
+  JoinGame: {fileID: 0}

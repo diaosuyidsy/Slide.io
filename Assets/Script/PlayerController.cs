@@ -37,7 +37,6 @@ public class PlayerController : NetworkBehaviour
 		}
 	}
 
-
 	void FixedUpdate ()
 	{
 		float h = -Input.GetAxis ("Horizontal");
@@ -59,8 +58,8 @@ public class PlayerController : NetworkBehaviour
 			}
 		}
 
-		Vector2 pullForce = transform.up * (Input.GetAxis ("Vertical") * acceleration);
-//		Vector2 pullForce = transform.up * (1 * acceleration);
+//		Vector2 pullForce = transform.up * (Input.GetAxis ("Vertical") * acceleration);
+		Vector2 pullForce = transform.up * (1 * acceleration);
 		rb.AddForce (pullForce);
 
 		//Limit car velocity

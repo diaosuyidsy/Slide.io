@@ -48,7 +48,7 @@ public class PlayerStats : NetworkBehaviour
 		if (health <= 0) {
 			health = 0;
 
-			informationText = GameObject.FindObjectOfType<Text> ();
+			informationText = GameObject.Find ("FinalText").GetComponent<Text> ();
 
 			if (isLocalPlayer) {
 				informationText.text = "Game Over";
@@ -75,8 +75,8 @@ public class PlayerStats : NetworkBehaviour
 	[ClientRpc]
 	void RpcConsume ()
 	{
-		GetComponent<TrailRenderer> ().time += 0.5f;
-		GetComponent<CrushDetection> ().trailSpawnTimeInterval += 0.015f;
+		GetComponent<TrailRenderer> ().time += 0.3f;
+		GetComponent<CrushDetection> ().trailSpawnTimeInterval += 0.01f;
 	}
 
 	public void takeConsume ()

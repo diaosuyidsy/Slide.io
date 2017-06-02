@@ -64,8 +64,11 @@ public class SlideioNetworkManager : NetworkManager
 	// Override to disable default action
 	public override void OnClientSceneChanged (NetworkConnection conn)
 	{
-		
+//		if (GameObject.Find ("LeaderboardManager") == null) {
+//			Debug.Log ("Leaderboard Manager is null");
+//		} else {
+//			GameObject.Find ("LeaderboardManager").GetComponent<LeaderboardManager> ().SpawnPlayerInfo (playerPrefab.GetComponentInChildren<PlayerStats> ().playerName);
+//		}
 	}
-
 
 }

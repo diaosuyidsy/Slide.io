@@ -13,6 +13,7 @@ public class CrushDetection :  NetworkBehaviour
 	private Vector3[] locs;
 	private int head;
 	private int tail = 0;
+	private int numOfTrails;
 
 
 
@@ -20,13 +21,9 @@ public class CrushDetection :  NetworkBehaviour
 	{
 		RaycastHit2D hit = Hit ();
 		if (hit.collider != null) {
-//			Debug.Log ("Hit Name: " + hit.collider.gameObject.name + "\n" +
-//			"this gameobject name: " + this.gameObject.name + "\n" +
-//			"Hit parent Name: " + hit.collider.transform.parent.gameObject.name);
 			if (hit.collider.gameObject != this.gameObject &&
 			    hit.collider.gameObject.transform.parent != null &&
 			    hit.collider.gameObject.transform.parent.gameObject != this.gameObject) {
-				//				Debug.Log ("Try to destroy this");
 				preDealDamage (hit.collider.gameObject, 1);
 			}
 		}
@@ -34,13 +31,16 @@ public class CrushDetection :  NetworkBehaviour
 
 	void Start ()
 	{
+		numOfTrails = 20;
 		// Logic for Trail
-		locs = new Vector3[20];
+		locs = new Vector3[numOfTrails];
 		for (int i = 0; i < locs.Length; i++) {
 			locs [i] = trailSpawnPoint.transform.position;
 		}
 		head = locs.Length - 1;
+
 		StartCoroutine (CollectData ());
+//		StartCoroutine (TestAdd ());
 	}
 
 	void OnCollisionEnter2D (Collision2D coll)
@@ -63,6 +63,24 @@ public class CrushDetection :  NetworkBehaviour
 			if (isServer)
 				stat.takeDamage (damage);
 		}
+	}
+
+	IEnumerator TestAdd ()
+	{
+		yield return new WaitForSeconds (3f);
+		int oldNum = numOfTrails;
+		numOfTrails += 20;
+		Vector3[] newLocs = new Vector3[numOfTrails];
+		for (int i = 0; i < newLocs.Length; i++) {
+			if (i < oldNum) {
+				newLocs [i] = locs [i];
+			} else {
+				newLocs [i] = locs [oldNum - 1];
+			}
+		}
+
+		locs = newLocs;
+		StartCoroutine (TestAdd ());
 	}
 
 	IEnumerator CollectData ()
