@@ -110,7 +110,7 @@ public class PlayerController : NetworkBehaviour
 
 	public override void OnStartLocalPlayer ()
 	{
-		GetComponent<SpriteOutline> ().enabled = true;
+//		GetComponent<SpriteOutline> ().enabled = true;
 	}
 
 	void Start ()
