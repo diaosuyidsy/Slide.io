@@ -52,12 +52,32 @@ public class PlayerStats : NetworkBehaviour
 
 			if (isLocalPlayer) {
 				informationText.text = "Game Over";
-			} else {
-				informationText.text = "You Won";
-			}
+				GetComponent<PlayerController> ().locked = true;
+				StartCoroutine (respawn (3f));
+			} 
 
 			return;
 		}
+	}
+
+	IEnumerator respawn (float time)
+	{
+		yield return new WaitForSeconds (time);
+		informationText.text = "";
+		NetworkStartPosition[] spawnPoints = FindObjectsOfType<NetworkStartPosition> ();
+		// Set the spawn point to origin as a default value
+		Vector3 spawnPoint = Vector3.zero;
+
+		// If there is a spawn point array and the array is not empty, pick a spawn point at random
+		if (spawnPoints != null && spawnPoints.Length > 0) {
+			spawnPoint = spawnPoints [Random.Range (0, spawnPoints.Length)].transform.position;
+		}
+
+		// Set the player’s position to the chosen spawn point
+		transform.position = spawnPoint;
+
+		GetComponent<PlayerController> ().locked = false;
+
 	}
 
 	public void takeDamage (int dmg)
@@ -73,17 +93,34 @@ public class PlayerStats : NetworkBehaviour
 	}
 
 	[ClientRpc]
-	void RpcConsume ()
+	void RpcConsume (bool consumePlayer)
 	{
-		GetComponent<TrailRenderer> ().time += 0.3f;
-		GetComponent<CrushDetection> ().trailSpawnTimeInterval += 0.01f;
+		if (consumePlayer) {
+			GetComponent<TrailRenderer> ().time += 0.03f;
+			GetComponent<CrushDetection> ().trailSpawnTimeInterval += 0.001f;
+		} else {
+			GetComponent<TrailRenderer> ().time += 0.003f;
+			GetComponent<CrushDetection> ().trailSpawnTimeInterval += 0.0001f;
+		}
+
 	}
 
-	public void takeConsume ()
+	public void takeConsume (bool consumePlayer)
 	{
-		if (!isServer)
+		if (isLocalPlayer) {
+			if (Camera.main.orthographicSize <= 40) {
+				if (consumePlayer) {
+					Camera.main.orthographicSize += 1.5f;
+				} else {
+					Camera.main.orthographicSize += 0.5f;
+				}
+			}
+
+		}
+		if (!isServer) {
 			return;
-		RpcConsume ();
+		}
+		RpcConsume (consumePlayer);
 		return;
 	}
 }

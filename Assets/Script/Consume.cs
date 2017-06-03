@@ -56,7 +56,7 @@ public class Consume : NetworkBehaviour
 			stat = target.GetComponent<PlayerStats> ();
 		}
 		if (stat != null) {
-			stat.takeConsume ();
+			stat.takeConsume (false);
 		}
 	}
 }

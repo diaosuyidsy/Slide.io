@@ -15,6 +15,7 @@ public class PlayerController : NetworkBehaviour
 	public float steering;
 	public float maxSpeed;
 	public float maxBurstTime;
+	public bool locked = false;
 
 	private float burstTime;
 	private float acceleration;
@@ -23,6 +24,8 @@ public class PlayerController : NetworkBehaviour
 
 	void Update ()
 	{
+		if (locked)
+			return;
 		if (Input.GetButtonDown ("Stop")) {
 			for (int i = 0; i < Wheels.Length; i++) {
 				spawnedTrails [i] = Instantiate (trailSpawnPrefab);
@@ -39,6 +42,8 @@ public class PlayerController : NetworkBehaviour
 
 	void FixedUpdate ()
 	{
+		if (locked)
+			return;
 		float h = -Input.GetAxis ("Horizontal");
 
 		if (acceleration <= maxAcceleration) {
@@ -119,6 +124,7 @@ public class PlayerController : NetworkBehaviour
 			Destroy (this);
 			return;
 		}
+		locked = false;
 		rb = GetComponent<Rigidbody2D> ();
 		Camera.main.GetComponent<CameraFollow2D> ().setTarget (gameObject.transform);
 		acceleration = 0f;

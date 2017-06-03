@@ -25,6 +25,9 @@ public class CrushDetection :  NetworkBehaviour
 			    hit.collider.gameObject.transform.parent != null &&
 			    hit.collider.gameObject.transform.parent.gameObject != this.gameObject) {
 				preDealDamage (hit.collider.gameObject, 1);
+				if (hit.collider.gameObject.tag == "Player") {
+					GetComponent<PlayerStats> ().takeConsume (true);
+				}
 			}
 		}
 	}
@@ -47,6 +50,9 @@ public class CrushDetection :  NetworkBehaviour
 	{
 		Debug.Log ("Collided");
 		preDealDamage (coll.gameObject, 1);
+		if (coll.collider.gameObject.tag == "Player") {
+			GetComponent<PlayerStats> ().takeConsume (true);
+		}
 	}
 
 	void preDealDamage (GameObject target, int damage)

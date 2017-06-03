@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4000012551579550}
   m_Layer: 0
   m_Name: Front Left Wheel
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -36,7 +36,7 @@ GameObject:
   - component: {fileID: 4000013998014762}
   m_Layer: 0
   m_Name: TrailStart
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -51,7 +51,7 @@ GameObject:
   - component: {fileID: 4000011050259146}
   m_Layer: 0
   m_Name: Back Right Wheel
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 4000010854025760}
   m_Layer: 0
   m_Name: Wheels
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -105,7 +105,7 @@ GameObject:
   - component: {fileID: 4000010497177224}
   m_Layer: 0
   m_Name: Back Left Wheel
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -120,7 +120,7 @@ GameObject:
   - component: {fileID: 4000014269651186}
   m_Layer: 0
   m_Name: Front Right Wheel
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 50979145022647580}
   m_Layer: 0
   m_Name: Body
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -155,7 +155,7 @@ GameObject:
   - component: {fileID: 114672726223656214}
   m_Layer: 0
   m_Name: Canvas
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -172,7 +172,7 @@ GameObject:
   - component: {fileID: 114720652219749518}
   m_Layer: 0
   m_Name: Name
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -412,7 +412,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.3
+  m_Time: 0.6
   m_Parameters:
     serializedVersion: 2
     widthMultiplier: 1
@@ -653,7 +653,7 @@ SpriteRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 2100000, guid: e2e0671a1c279495c800999573ebcc2e, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
