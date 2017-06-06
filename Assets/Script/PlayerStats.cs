@@ -8,7 +8,7 @@ public class PlayerStats : NetworkBehaviour
 {
 
 	public int maxHealth = 1;
-
+	public GameObject explosionPrefab;
 	[SyncVar]
 	public string playerName;
 
@@ -37,30 +37,49 @@ public class PlayerStats : NetworkBehaviour
 		health = maxHealth;
 	}
 
+	//Takes care of player when they die
 	[ClientRpc]
 	void RpcdamagePlayer (int dmg)
 	{
-		Debug.Log ("Took Damage");
-		if (health <= 0)
-			return;
-		health -= dmg;
-
-		if (health <= 0) {
-			health = 0;
-
-			informationText = GameObject.Find ("FinalText").GetComponent<Text> ();
-
-			if (isLocalPlayer) {
-				informationText.text = "Game Over";
-				GetComponent<PlayerController> ().locked = true;
-				StartCoroutine (respawn (3f));
-			} 
-
-			return;
+		informationText = GameObject.Find ("FinalText").GetComponent<Text> ();
+		GameObject.Find (playerName + "ScorePanel").GetComponent<ScorePanel> ().playerScore = 0;
+		GetComponent<SpriteRenderer> ().enabled = false;
+		GetComponentInChildren<Text> ().enabled = false;
+		foreach (BoxCollider2D childcoll in GetComponentsInChildren <BoxCollider2D> ()) {
+			childcoll.enabled = false;
 		}
+		GetComponent<CrushDetection> ().locked = true;
+		if (isLocalPlayer) {
+			informationText.text = "You Died";
+			GetComponent<PlayerController> ().locked = true;
+			Camera.main.orthographicSize = 20f;
+			StartCoroutine (respawnText (5));
+		} 
+		StartCoroutine (respawn (5));
+
 	}
 
-	IEnumerator respawn (float time)
+
+
+	IEnumerator respawnText (int respawnTime)
+	{
+		Debug.Log ("respawn text");
+		yield return new WaitForSeconds (1f);
+		StartCoroutine (respawnCountdown (respawnTime));
+	}
+
+	IEnumerator respawnCountdown (int respawnTime)
+	{
+		Debug.Log ("respawn count down");
+
+		for (int i = respawnTime - 1; i > 0; i--) {
+			informationText.text = i.ToString ();
+			yield return new WaitForSeconds (1f);
+		}
+		GetComponent<PlayerController> ().locked = false;
+	}
+
+	IEnumerator respawn (int time)
 	{
 		yield return new WaitForSeconds (time);
 		informationText.text = "";
@@ -74,10 +93,19 @@ public class PlayerStats : NetworkBehaviour
 		}
 
 		// Set the player’s position to the chosen spawn point
+		transform.rotation = Quaternion.identity;
 		transform.position = spawnPoint;
+		health = maxHealth;
 
-		GetComponent<PlayerController> ().locked = false;
-
+		GetComponent<SpriteRenderer> ().enabled = true;
+		GetComponentInChildren<Text> ().enabled = true;
+		foreach (BoxCollider2D childcoll in GetComponentsInChildren <BoxCollider2D> ()) {
+			childcoll.enabled = true;
+		}
+		for (int i = 0; i < GetComponent<CrushDetection> ().locs.Length; i++) {
+			GetComponent<CrushDetection> ().locs [i] = GetComponent<CrushDetection> ().trailSpawnPoint.position;
+		}
+		GetComponent<CrushDetection> ().locked = false;
 	}
 
 	public void takeDamage (int dmg)
@@ -87,8 +115,17 @@ public class PlayerStats : NetworkBehaviour
 			Debug.Log ("It's not server, return");
 			return;
 		}
-			
-		RpcdamagePlayer (dmg);
+		Debug.Log ("Took Damage");
+		if (health <= 0)
+			return;
+		health -= dmg;
+		if (health <= 0) {
+			health = 0;
+			GameObject explosion = (GameObject)Instantiate (explosionPrefab, transform.position, Quaternion.identity);
+			NetworkServer.Spawn (explosion);
+
+			RpcdamagePlayer (dmg);
+		}
 		return;
 	}
 
@@ -96,11 +133,14 @@ public class PlayerStats : NetworkBehaviour
 	void RpcConsume (bool consumePlayer)
 	{
 		if (consumePlayer) {
-			GetComponent<TrailRenderer> ().time += 0.03f;
-			GetComponent<CrushDetection> ().trailSpawnTimeInterval += 0.001f;
+			GetComponent<TrailRenderer> ().time += 0.09f;
+			GetComponent<CrushDetection> ().trailSpawnTimeInterval += 0.003f;
+			GameObject.Find (playerName + "ScorePanel").GetComponent<ScorePanel> ().playerScore += 10;
+
 		} else {
-			GetComponent<TrailRenderer> ().time += 0.003f;
-			GetComponent<CrushDetection> ().trailSpawnTimeInterval += 0.0001f;
+			GetComponent<TrailRenderer> ().time += 0.009f;
+			GetComponent<CrushDetection> ().trailSpawnTimeInterval += 0.0003f;
+			GameObject.Find (playerName + "ScorePanel").GetComponent<ScorePanel> ().playerScore += 1;
 		}
 
 	}
@@ -110,9 +150,9 @@ public class PlayerStats : NetworkBehaviour
 		if (isLocalPlayer) {
 			if (Camera.main.orthographicSize <= 40) {
 				if (consumePlayer) {
-					Camera.main.orthographicSize += 1.5f;
-				} else {
 					Camera.main.orthographicSize += 0.5f;
+				} else {
+					Camera.main.orthographicSize += 0.05f;
 				}
 			}
 
@@ -123,4 +163,6 @@ public class PlayerStats : NetworkBehaviour
 		RpcConsume (consumePlayer);
 		return;
 	}
+
+
 }

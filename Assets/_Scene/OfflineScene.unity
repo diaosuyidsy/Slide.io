@@ -281,8 +281,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 298469768}
-        m_MethodName: TryJoingame
+      - m_Target: {fileID: 1745664928}
+        m_MethodName: TryJoinGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -337,7 +337,7 @@ Prefab:
     - target: {fileID: 114975740705217148, guid: 58396e6cdbe5a4348aaba072cc48ec5c,
         type: 2}
       propertyPath: m_SpawnPrefabs.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4946590953948798, guid: 58396e6cdbe5a4348aaba072cc48ec5c, type: 2}
       propertyPath: m_LocalPosition.x
@@ -392,15 +392,15 @@ Prefab:
       propertyPath: m_NetworkAddress
       value: localhost
       objectReference: {fileID: 0}
+    - target: {fileID: 114975740705217148, guid: 58396e6cdbe5a4348aaba072cc48ec5c,
+        type: 2}
+      propertyPath: m_SpawnPrefabs.Array.data[2]
+      value: 
+      objectReference: {fileID: 1991922476274684, guid: a834655de40ff4c79ade30e07e81a8e2,
+        type: 2}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 58396e6cdbe5a4348aaba072cc48ec5c, type: 2}
   m_IsPrefabParent: 0
---- !u!114 &298469768 stripped
-MonoBehaviour:
-  m_PrefabParentObject: {fileID: 114975740705217148, guid: 58396e6cdbe5a4348aaba072cc48ec5c,
-    type: 2}
-  m_PrefabInternal: {fileID: 298469767}
-  m_Script: {fileID: 11500000, guid: 36b1a89ffe3fb4a71a039ddf21f460e3, type: 3}
 --- !u!1 &694522650
 GameObject:
   m_ObjectHideFlags: 0
@@ -757,7 +757,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 298469768}
+      - m_Target: {fileID: 1745664928}
         m_MethodName: TryStartGame
         m_Mode: 1
         m_Arguments:
@@ -1112,6 +1112,59 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1630555584}
+--- !u!1001 &1745664927
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4021105108429160, guid: f60b2554773e44428b3bc8be118956e2, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4021105108429160, guid: f60b2554773e44428b3bc8be118956e2, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4021105108429160, guid: f60b2554773e44428b3bc8be118956e2, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4021105108429160, guid: f60b2554773e44428b3bc8be118956e2, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4021105108429160, guid: f60b2554773e44428b3bc8be118956e2, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4021105108429160, guid: f60b2554773e44428b3bc8be118956e2, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4021105108429160, guid: f60b2554773e44428b3bc8be118956e2, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4021105108429160, guid: f60b2554773e44428b3bc8be118956e2, type: 2}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114493812403774390, guid: f60b2554773e44428b3bc8be118956e2,
+        type: 2}
+      propertyPath: inputName
+      value: 
+      objectReference: {fileID: 857726423}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: f60b2554773e44428b3bc8be118956e2, type: 2}
+  m_IsPrefabParent: 0
+--- !u!114 &1745664928 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114493812403774390, guid: f60b2554773e44428b3bc8be118956e2,
+    type: 2}
+  m_PrefabInternal: {fileID: 1745664927}
+  m_Script: {fileID: 11500000, guid: 436b4f05ab364452cab30d901715fbaa, type: 3}
 --- !u!1 &1746767021
 GameObject:
   m_ObjectHideFlags: 0

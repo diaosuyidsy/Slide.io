@@ -40,6 +40,7 @@ GameObject:
   - component: {fileID: 114141772872812352}
   - component: {fileID: 114164230817467154}
   - component: {fileID: 114508601931237414}
+  - component: {fileID: 114179651535286156}
   m_Layer: 5
   m_Name: ScorePanel (Panel)
   m_TagString: Untagged
@@ -113,6 +114,19 @@ MonoBehaviour:
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
+--- !u!114 &114179651535286156
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1749302393099696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9924b392f609446158a19405cc27c100, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerName: QWE
+  playerScore: 0
 --- !u!114 &114202702375940002
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -139,13 +153,13 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 40
-    m_Alignment: 0
+    m_Alignment: 1
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: '   Client2'
 --- !u!114 &114508601931237414
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -160,22 +174,22 @@ MonoBehaviour:
   m_SceneId:
     m_Value: 0
   m_AssetId:
-    i0: 0
-    i1: 0
-    i2: 0
-    i3: 0
-    i4: 0
-    i5: 0
-    i6: 0
-    i7: 0
-    i8: 0
-    i9: 0
-    i10: 0
-    i11: 0
-    i12: 0
-    i13: 0
-    i14: 0
-    i15: 0
+    i0: 5
+    i1: 157
+    i2: 51
+    i3: 225
+    i4: 22
+    i5: 181
+    i6: 20
+    i7: 64
+    i8: 58
+    i9: 145
+    i10: 76
+    i11: 217
+    i12: 107
+    i13: 9
+    i14: 45
+    i15: 250
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
 --- !u!114 &114598573748240434
@@ -204,13 +218,13 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 10
     m_MaxSize: 40
-    m_Alignment: 2
+    m_Alignment: 0
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 
+  m_Text: 0
 --- !u!222 &222182355713579082
 CanvasRenderer:
   m_ObjectHideFlags: 1

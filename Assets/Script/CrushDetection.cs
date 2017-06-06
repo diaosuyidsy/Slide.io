@@ -10,15 +10,18 @@ public class CrushDetection :  NetworkBehaviour
 	public Transform trailSpawnPoint;
 
 	private RaycastHit hit;
-	private Vector3[] locs;
+	public Vector3[] locs;
 	private int head;
 	private int tail = 0;
 	private int numOfTrails;
+	public bool locked = false;
 
 
 
 	void FixedUpdate ()
 	{
+		if (locked)
+			return;
 		RaycastHit2D hit = Hit ();
 		if (hit.collider != null) {
 			if (hit.collider.gameObject != this.gameObject &&
@@ -34,7 +37,7 @@ public class CrushDetection :  NetworkBehaviour
 
 	void Start ()
 	{
-		numOfTrails = 20;
+		numOfTrails = 25;
 		// Logic for Trail
 		locs = new Vector3[numOfTrails];
 		for (int i = 0; i < locs.Length; i++) {
@@ -52,6 +55,9 @@ public class CrushDetection :  NetworkBehaviour
 		preDealDamage (coll.gameObject, 1);
 		if (coll.collider.gameObject.tag == "Player") {
 			GetComponent<PlayerStats> ().takeConsume (true);
+		}
+		if (coll.collider.gameObject.tag == "Edge") {
+			GetComponent<PlayerStats> ().takeDamage (1);
 		}
 	}
 

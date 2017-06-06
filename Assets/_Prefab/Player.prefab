@@ -415,7 +415,7 @@ TrailRenderer:
   m_Time: 0.6
   m_Parameters:
     serializedVersion: 2
-    widthMultiplier: 1
+    widthMultiplier: 3
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -427,29 +427,29 @@ TrailRenderer:
         tangentMode: 0
       - serializedVersion: 2
         time: 1
-        value: 0.2
+        value: 0.066668704
         inSlope: 0
         outSlope: 0
         tangentMode: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
-      m_RotationOrder: 4
+      m_RotationOrder: 0
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 0, b: 0, a: 1}
-      key1: {r: 1, g: 0, b: 0, a: 1}
-      key2: {r: 1, g: 1, b: 1, a: 1}
-      key3: {r: 1, g: 1, b: 1, a: 1}
-      key4: {r: 1, g: 1, b: 1, a: 0}
-      key5: {r: 0, g: 0, b: 0, a: 0}
+      key0: {r: 1, g: 0.7803922, b: 0.058823533, a: 1}
+      key1: {r: 1, g: 0.8235295, b: 0.24705884, a: 1}
+      key2: {r: 1, g: 0.78823537, b: 0.09411766, a: 1}
+      key3: {r: 0.039215688, g: 0.6392157, b: 1, a: 1}
+      key4: {r: 0, g: 0.6275863, b: 1, a: 1}
+      key5: {r: 1, g: 1, b: 1, a: 0}
       key6: {r: 0, g: 0, b: 0, a: 0}
       key7: {r: 0, g: 0, b: 0, a: 0}
       ctime0: 0
       ctime1: 16384
       ctime2: 32768
-      ctime3: 49151
+      ctime3: 48959
       ctime4: 65535
-      ctime5: 0
+      ctime5: 65535
       ctime6: 0
       ctime7: 0
       atime0: 0
@@ -467,7 +467,7 @@ TrailRenderer:
     numCapVertices: 0
     alignment: 0
     textureMode: 0
-  m_MinVertexDistance: 0.1
+  m_MinVertexDistance: 0
   m_Autodestruct: 0
 --- !u!114 &114000012222696590
 MonoBehaviour:
@@ -491,6 +491,7 @@ MonoBehaviour:
   steering: 2
   maxSpeed: 300
   maxBurstTime: 3
+  locked: 0
 --- !u!114 &114036810834765382
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -524,6 +525,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 1
+  explosionPrefab: {fileID: 1991922476274684, guid: a834655de40ff4c79ade30e07e81a8e2,
+    type: 2}
   playerName: 
 --- !u!114 &114353320160510448
 MonoBehaviour:
@@ -640,6 +643,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trailSpawnTimeInterval: 0.001
   trailSpawnPoint: {fileID: 4000013998014762}
+  locs: []
+  locked: 0
 --- !u!212 &212000014215773184
 SpriteRenderer:
   m_ObjectHideFlags: 1
