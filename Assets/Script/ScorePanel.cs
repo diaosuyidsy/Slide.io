@@ -29,6 +29,8 @@ public class ScorePanel : NetworkBehaviour
 		if (isServer) {
 			if (newScore > playerScore) {
 				RpcBubbleUp (newScore);
+			} else if (newScore < playerScore) {
+				RpcBubbleDown (newScore);
 			}
 		}
 	}
@@ -41,7 +43,16 @@ public class ScorePanel : NetworkBehaviour
 			transform.SetSiblingIndex (curPos - 1);
 			curPos = transform.GetSiblingIndex ();
 		}
+	}
 
+	[ClientRpc]
+	void RpcBubbleDown (int newScore)
+	{
+		int curPos = transform.GetSiblingIndex ();
+		while (curPos != transform.parent.childCount - 1 && transform.parent.GetChild (curPos + 1).gameObject.GetComponent<ScorePanel> ().playerScore > newScore) {
+			transform.SetSiblingIndex (curPos + 1);
+			curPos = transform.GetSiblingIndex ();
+		}
 	}
 
 	//	void OnApplicationQuit ()

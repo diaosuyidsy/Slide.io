@@ -336,6 +336,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 114975740705217148, guid: 58396e6cdbe5a4348aaba072cc48ec5c,
         type: 2}
+      propertyPath: m_Channels.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114975740705217148, guid: 58396e6cdbe5a4348aaba072cc48ec5c,
+        type: 2}
       propertyPath: m_SpawnPrefabs.Array.size
       value: 3
       objectReference: {fileID: 0}
@@ -398,6 +403,16 @@ Prefab:
       value: 
       objectReference: {fileID: 1991922476274684, guid: a834655de40ff4c79ade30e07e81a8e2,
         type: 2}
+    - target: {fileID: 114975740705217148, guid: 58396e6cdbe5a4348aaba072cc48ec5c,
+        type: 2}
+      propertyPath: m_Channels.Array.data[0]
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114975740705217148, guid: 58396e6cdbe5a4348aaba072cc48ec5c,
+        type: 2}
+      propertyPath: m_CustomConfig
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 58396e6cdbe5a4348aaba072cc48ec5c, type: 2}
   m_IsPrefabParent: 0

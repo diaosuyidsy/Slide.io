@@ -63,15 +63,12 @@ public class PlayerStats : NetworkBehaviour
 
 	IEnumerator respawnText (int respawnTime)
 	{
-		Debug.Log ("respawn text");
 		yield return new WaitForSeconds (1f);
 		StartCoroutine (respawnCountdown (respawnTime));
 	}
 
 	IEnumerator respawnCountdown (int respawnTime)
 	{
-		Debug.Log ("respawn count down");
-
 		for (int i = respawnTime - 1; i > 0; i--) {
 			informationText.text = i.ToString ();
 			yield return new WaitForSeconds (1f);
@@ -110,12 +107,9 @@ public class PlayerStats : NetworkBehaviour
 
 	public void takeDamage (int dmg)
 	{
-		Debug.Log ("Enter the takeDamage Function");
 		if (!isServer) {
-			Debug.Log ("It's not server, return");
 			return;
 		}
-		Debug.Log ("Took Damage");
 		if (health <= 0)
 			return;
 		health -= dmg;

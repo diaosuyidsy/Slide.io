@@ -16,8 +16,6 @@ public class CrushDetection :  NetworkBehaviour
 	private int numOfTrails;
 	public bool locked = false;
 
-
-
 	void FixedUpdate ()
 	{
 		if (locked)
@@ -51,32 +49,28 @@ public class CrushDetection :  NetworkBehaviour
 
 	void OnCollisionEnter2D (Collision2D coll)
 	{
-		Debug.Log ("Collided");
 		preDealDamage (coll.gameObject, 1);
 		if (coll.collider.gameObject.tag == "Player") {
 			GetComponent<PlayerStats> ().takeConsume (true);
 		}
-		if (coll.collider.gameObject.tag == "Edge") {
-			GetComponent<PlayerStats> ().takeDamage (1);
-		}
+
 	}
 
 	void preDealDamage (GameObject target, int damage)
 	{
 		PlayerStats stat = null;
 		if (target.name == "Body") {
-			Debug.Log ("It's Body");
 			stat = target.transform.parent.GetComponent<PlayerStats> ();
 		} else {
 			stat = target.GetComponent<PlayerStats> ();
 		}
 		if (stat != null) {
-			Debug.Log ("Stat is not null");
 			if (isServer)
 				stat.takeDamage (damage);
 		}
 	}
 
+	//Only testing this feature
 	IEnumerator TestAdd ()
 	{
 		yield return new WaitForSeconds (3f);
