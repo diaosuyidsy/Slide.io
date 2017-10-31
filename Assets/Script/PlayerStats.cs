@@ -15,9 +15,10 @@ public class PlayerStats : NetworkBehaviour
 	Text informationText;
 
 	int health;
-
-	//	private float trailSpawnInterval = 0.05f;
-	//	private float trailTime = 1.5f;
+	//	private PlayerController pc;
+	private bool speedyLock;
+	private bool ignoreyLock;
+	public float mapObjectiveTimer;
 
 	public override void OnStartServer ()
 	{
@@ -35,6 +36,10 @@ public class PlayerStats : NetworkBehaviour
 	void Start ()
 	{
 		health = maxHealth;
+//		pc = GetComponent<PlayerController> ();
+		speedyLock = true;
+		ignoreyLock = true;
+		mapObjectiveTimer = 0f;
 	}
 
 	//Takes care of player when they die
@@ -58,8 +63,6 @@ public class PlayerStats : NetworkBehaviour
 		StartCoroutine (respawn (5));
 
 	}
-
-
 
 	IEnumerator respawnText (int respawnTime)
 	{
@@ -141,6 +144,7 @@ public class PlayerStats : NetworkBehaviour
 
 	public void takeConsume (bool consumePlayer)
 	{
+		// if it's local player, adjust hes camera
 		if (isLocalPlayer) {
 			if (Camera.main.orthographicSize <= 40) {
 				if (consumePlayer) {
@@ -149,14 +153,65 @@ public class PlayerStats : NetworkBehaviour
 					Camera.main.orthographicSize += 0.05f;
 				}
 			}
-
 		}
 		if (!isServer) {
 			return;
 		}
+		// if it's server, add ult charge to sync var
+		if (consumePlayer)
+			GetComponent<PlayerAbilityControl> ().addUltCharge (0.95f);
+		else
+			GetComponent<PlayerAbilityControl> ().addUltCharge (0.03f);
+		// if it's server, do rpc on all clients
 		RpcConsume (consumePlayer);
 		return;
 	}
 
+	public bool isUnstoppable ()
+	{
+		return !ignoreyLock;
+	}
 
+	void FixedUpdate ()
+	{
+		if (!speedyLock) {
+			if (GetComponent<PlayerController> ().getAcc () >= GetComponent<PlayerController> ().maxAcceleration * 1.5f)
+				return;
+			GetComponent<PlayerController> ().setAcc (GetComponent<PlayerController> ().maxAcceleration * 1.5f);
+			mapObjectiveTimer += Time.deltaTime;
+			if (mapObjectiveTimer >= 10f) {
+				speedyLock = true;
+				mapObjectiveTimer = 0f;
+				GetComponent<PlayerController> ().setAcc (GetComponent<PlayerController> ().maxAcceleration);
+			}
+		}
+
+		if (!ignoreyLock) {
+			health = 99;
+			mapObjectiveTimer += Time.deltaTime;
+			if (mapObjectiveTimer >= 10f) {
+				ignoreyLock = true;
+				mapObjectiveTimer = 0f;
+				health = maxHealth;
+			}
+		}
+	}
+
+	public void takeMapObjective (MapObjectiveType mot)
+	{
+		if (isServer)
+			GetComponent<PlayerAbilityControl> ().addUltCharge (0.5f);
+	
+		switch (mot) {
+		case MapObjectiveType.Speedy:
+			//Check if there is a stronger effect on player already
+			if (GetComponent<PlayerController> ().getAcc () >= GetComponent<PlayerController> ().maxAcceleration * 1.5f)
+				return;
+			speedyLock = false;
+			break;
+		case MapObjectiveType.Ignorey:
+			ignoreyLock = false;
+			break;
+		}
+	}
 }

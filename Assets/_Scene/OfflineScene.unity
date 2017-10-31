@@ -1028,7 +1028,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 35.167.33.57
+  m_Text: 35.167.33.57 <- Amazon Server
 --- !u!222 &1506772389
 CanvasRenderer:
   m_ObjectHideFlags: 0

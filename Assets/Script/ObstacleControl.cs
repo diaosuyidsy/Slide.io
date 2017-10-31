@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 public class ObstacleControl : NetworkBehaviour
 {
@@ -87,6 +90,7 @@ public class ObstacleControl : NetworkBehaviour
 	}
 }
 
+#if UNITY_EDITOR
 [CustomEditor (typeof(ObstacleControl))]
 public class ObstacleControlEditor : Editor
 {
@@ -117,3 +121,5 @@ public class ObstacleControlEditor : Editor
 		}
 	}
 }
+
+#endif

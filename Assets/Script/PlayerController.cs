@@ -14,12 +14,10 @@ public class PlayerController : NetworkBehaviour
 	public float maxAcceleration;
 	public float steering;
 	public float maxSpeed;
-	public float maxBurstTime;
 	public bool locked = false;
+	public Canvas GUICanvas;
 
-	private float burstTime;
 	private float acceleration;
-	private bool burstLock = true;
 	private GameObject[] spawnedTrails;
 
 	void Update ()
@@ -51,27 +49,15 @@ public class PlayerController : NetworkBehaviour
 		}
 
 		if (acceleration > maxAcceleration) {
-			acceleration -= 5 * Time.deltaTime;
+			acceleration -= 10 * Time.deltaTime;
 		}
-
-		if (!burstLock) {
-			acceleration = 3f * maxAcceleration;
-			burstTime -= Time.deltaTime;
-			if (burstTime <= 0f) {
-				burstLock = true;
-				burstTime = maxBurstTime;
-			}
-		}
-
-		Vector2 pullForce = transform.up * (Input.GetAxis ("Vertical") * acceleration);
-//		Vector2 pullForce = transform.up * (1 * acceleration);
+			
+//		Vector2 pullForce = transform.up * (Input.GetAxis ("Vertical") * acceleration);
+		Vector2 pullForce = transform.up * (1 * acceleration);
 		rb.AddForce (pullForce);
 
 		//Limit car velocity
 		rb.velocity = Vector2.ClampMagnitude (rb.velocity, maxSpeed);
-		if (Input.GetButton ("Burst")) {
-			burstLock = false;
-		}
 
 		if (Input.GetButton ("Stop")) {
 
@@ -122,14 +108,23 @@ public class PlayerController : NetworkBehaviour
 	{
 		if (!isLocalPlayer) {
 			Destroy (this);
+			Destroy (GUICanvas.gameObject);
 			return;
 		}
 		locked = false;
 		rb = GetComponent<Rigidbody2D> ();
 		Camera.main.GetComponent<CameraFollow2D> ().setTarget (gameObject.transform);
 		acceleration = 0f;
-		burstLock = true;
-		burstTime = maxBurstTime;
 		spawnedTrails = new GameObject[4];
+	}
+
+	public void setAcc (float newAcc)
+	{
+		acceleration = newAcc;
+	}
+
+	public float getAcc ()
+	{
+		return acceleration;
 	}
 }
